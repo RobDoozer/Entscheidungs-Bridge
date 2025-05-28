@@ -1,22 +1,15 @@
-# CAN-IDs
-ID_FAHRBEFEHL = 0x101
-ID_HINDERNIS = 0x202
+# can_definitions.py
 
-# Fahrbefehle (1 Byte)
-FAHRBEFEHL_VOR 	= [0x01]
-FAHRBEFEHL_RUECK   = [0x02]
-FAHRBEFEHL_RECHTS  = [0x03]
-FAHRBEFEHL_LINKS   = [0x04]
+# Dummy-ID zur CAN-Analyse (kann später entfernt werden)
+ID_FAHRT = 0x101
 
-# Bitpositionen für Hindernisse
-HINDERNIS_VORNE_BIT  = 0
-HINDERNIS_HINTEN_BIT = 1
-# Für Erweiterung z. B.:
-# HINDERNIS_RECHTS_BIT = 2
-# HINDERNIS_LINKS_BIT  = 3
+# Hindernisse: keine festen Bits mehr notwendig, da wir alles über Bitfelder aus ROS-Topics /bool_topic_X regeln
+# Falls du andere IDs beobachten willst, kannst du sie hier optional dokumentieren (nur für CAN-Logging)
 
-# Bitmasken (z. B. für Vergleich)
-HINDERNIS_VORNE    	= 1 << HINDERNIS_VORNE_BIT	# = 0x01
-HINDERNIS_HINTEN   	= 1 << HINDERNIS_HINTEN_BIT   # = 0x02
-HINDERNIS_VORNE_HINTEN = HINDERNIS_VORNE | HINDERNIS_HINTEN
-HINDERNIS_NONE     	= 0x00
+# Bitmaske Beispiel zur Lesbarkeit (optional)
+HINDERNIS_NONE = 0x00  # keine Bits gesetzt
+
+# Richtungscodes für ROS-Fahrbefehl (UInt8)
+FAHREN_STOPP = 0
+FAHREN_VORWAERTS = 1
+FAHREN_RUECKWAERTS = 2
