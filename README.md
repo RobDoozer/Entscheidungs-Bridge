@@ -1,4 +1,3 @@
-Versionen:
 Stand von 22.5.2025: Bridge über ROS, Empfangen und Senden über CAN
 
 Stand von 5.6.2025: Bridge über ROS, Empfangen und Senden über ROS
