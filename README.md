@@ -5,8 +5,12 @@ ROS Workspace aktivieren:
 cd ~/ros2_ws
 source install/setup.bash
 
+Bridge Node starten:
+ros2 run can_interface can_bridge_node
+
 CAN starten:
 sudo ip link set can0 up type can bitrate 500000
 
-Bridge Node starten:
-ros2 run can_interface can_bridge_node
+CAN Nachrichten über Terminal schicken
+cansend can0 100#DEADBEEF
+
