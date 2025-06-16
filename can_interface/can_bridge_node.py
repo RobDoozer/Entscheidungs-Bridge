@@ -110,15 +110,19 @@ class CANBridge(Node):
         if rotation_blocked:
             turn = 0.0
 
-        if translation_blocked or rotation_blocked:
-            self.logger.warn(f'Fahrbefehl blockiert: [{original_forward:.2f}, {original_turn:.2f}] → [{forward:.2f}, {turn:.2f}]')
-        else:
-            self.logger.info(f'Fahrbefehl freigegeben: [{forward:.2f}, {turn:.2f}]')
+        def has_changed(new_fwd, new_turn, old_fwd, old_turn):
+            return (round(new_fwd, 3) != round(old_fwd, 3)) or (round(new_turn, 3) != round(old_turn, 3))
 
-        # Sende nur wenn sich etwas geändert hat
-        if forward == self.last_forward and turn == self.last_turn:
-            self.logger.debug('Fahrbefehl unverändert, nicht erneut gesendet.')
-            return
+        if self.last_forward is not None and self.last_turn is not None:
+            if not has_changed(forward, turn, self.last_forward, self.last_turn):
+                self.logger.debug('Fahrbefehl unverändert (auf 3 Dezimalstellen), nicht erneut gesendet.')
+                return
+
+        # Log-Ausgabe nur wenn es eine Änderung gab:
+        if translation_blocked or rotation_blocked:
+            self.logger.warn(f'Fahrbefehl blockiert: [{original_forward:.3f}, {original_turn:.3f}] → [{forward:.3f}, {turn:.3f}]')
+        else:
+            self.logger.info(f'Fahrbefehl freigegeben: [{forward:.3f}, {turn:.3f}]')
 
         self.last_forward = forward
         self.last_turn = turn
@@ -128,7 +132,7 @@ class CANBridge(Node):
         self.pub_freigabe.publish(msg_out)
 
         with open(self.ros_log_file, 'a', newline='') as f:
-            csv.writer(f).writerow([ts, '/controller_commands', '-', f'{forward:.2f},{turn:.2f}'])
+            csv.writer(f).writerow([ts, '/controller_commands', '-', f'{forward:.3f},{turn:.3f}'])
 
 def main(args=None):
     rclpy.init(args=args)
